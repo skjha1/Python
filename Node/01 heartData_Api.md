@@ -1,4 +1,13 @@
-```js
+// mkdir heart-app 
+// cd heart-app
+
+// npm init -y 
+// npm install express mongoose cors
+
+// Create a file with index.js
+// node inde.js
+
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -58,7 +67,25 @@ app.post('/api/heartData', async (req, res) => {
         res.status(500).send(error);
     }
 }); 
-```
+
+// API endpoint to delete heart data by id
+
+app.delete('/api/heartData/:id', async(req, res) => {
+    const {id} = req.params;
+
+    try {
+        const deletedHeartData = await Heart.findByIdAndDelete(id)
+        if(!deletedHeartData){
+            return res.status(404).send('Heart Data not found');
+        }
+        console.log('Heart Data deleted: ', deletedHeartData);
+        res.status(200).json(deletedHeartData);
+    } catch (error) {
+        console.error('Error deleting heart data: ', error);
+        res.status(500).send(error);
+    }
+})
+
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
